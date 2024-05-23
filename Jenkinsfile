@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { nodejs "node" }
     environment {
         TESTING_ENVIRONMENT = "staging"
         PRODUCTION_ENVIRONMENT = "production"
