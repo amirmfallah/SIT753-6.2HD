@@ -23,7 +23,7 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 echo "check the quality of the code using ESLint..."
-                sh 'npx eslint > lint.log'
+                sh 'npm run lint > lint.log'
             }
             post {
                 always {
