@@ -17,7 +17,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Running unit tests with Jest..."
-                sh 'npm run test'
+                sh 'npm run test:unit'
             }
         }
         stage('Code Analysis') {
@@ -58,7 +58,7 @@ pipeline {
         stage('Integration Tests on Staging') {
             steps {
                 echo "Running integtration tests with Jest..."
-                echo "npx jest --coverage"
+                echo "npm run test"
             }
         }
         stage('Deploy to Production') {
