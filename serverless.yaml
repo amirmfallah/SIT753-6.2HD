@@ -12,4 +12,7 @@ functions:
     environment:
       ENV: ${self:provider.stage}
     events:
-      - http: ANY /
+      - http:
+          path: /{proxy+}
+          method: any
+          cors: true
