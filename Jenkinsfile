@@ -26,7 +26,7 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 echo "check the quality of the code using ESLint..."
-                sh 'npm run lint --output-file lint.log'
+                sh 'npm run lint'
             }
             post {
                 always {
@@ -73,7 +73,7 @@ pipeline {
         stage('Setup Cloudwatch Alarm') {
             steps {
                 echo "Setting up Cloudwatch Alarm for Lambda function"
-                sh "aws cloudwatch put-metric-alarm --alarm-name ${env.LAMBDA_FUNCTION_NAME}-alarm --alarm-description 'Alarm when Lambda function has high error rate' --metric-name Errors --namespace AWS/Lambda --statistic SampleCount --period 60 --threshold 1 --comparison-operator GreaterThanThreshold --dimensions Name=FunctionName,Value=${env.LAMBDA_FUNCTION_NAME} --evaluation-periods 1 --alarm-actions ${env.SNS_TOPIC_ARN} --region ${env.AWS_REGION}"
+                sh "aws cloudwatch put-metric-alarm --alarm-name ${env.LAMBDA_FUNCTION_NAME}-alarm --alarm-description 'Alarm when Lambda function has high error rate' --metric-name Errors --namespace AWS/Lambda --statistic SampleCount --period 10 --threshold 1 --comparison-operator GreaterThanOrEqualToThreshold --dimensions Name=FunctionName,Value=${env.LAMBDA_FUNCTION_NAME} --evaluation-periods 1 --alarm-actions ${env.SNS_TOPIC_ARN} --region ${env.AWS_REGION}"
             }
         }
     }

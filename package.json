@@ -6,7 +6,7 @@
   "scripts": {
     "test:unit": "jest tests/sum.test.js",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint . --output-file lint.log"
   },
   "author": "",
   "license": "ISC",
