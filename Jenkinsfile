@@ -8,7 +8,7 @@ pipeline {
         PRODUCTION_ENVIRONMENT = "production"
         PATH = "/usr/local/bin:$PATH"
         LAMBDA_FUNCTION_NAME = 'sit-753-production-app'
-        SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:123456789012:my-sns-topic'
+        SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:058264244985:lambda-error-logs'
         AWS_REGION = 'us-east-1'
     }
     stages {
@@ -73,24 +73,7 @@ pipeline {
         stage('Setup Cloudwatch Alarm') {
             steps {
                 echo "Setting up Cloudwatch Alarm for Lambda function"
-                script {
-                    sh '''
-                    # Create or update a CloudWatch alarm for Lambda errors
-                    aws cloudwatch put-metric-alarm \
-                        --alarm-name ${LAMBDA_FUNCTION_NAME}-ErrorAlarm \
-                        --alarm-description "Alarm when ${LAMBDA_FUNCTION_NAME} has errors" \
-                        --metric-name Errors \
-                        --namespace AWS/Lambda \
-                        --statistic Sum \
-                        --period 300 \
-                        --evaluation-periods 1 \
-                        --threshold 1 \
-                        --comparison-operator GreaterThanOrEqualToThreshold \
-                        --alarm-actions ${SNS_TOPIC_ARN} \
-                        --dimensions Name=FunctionName,Value=${LAMBDA_FUNCTION_NAME} \
-                        --region ${AWS_REGION}
-                    '''
-                }
+                sh "aws cloudwatch put-metric-alarm --alarm-name ${env.LAMBDA_FUNCTION_NAME}-alarm --alarm-description 'Alarm when Lambda function has high error rate' --metric-name Errors --namespace AWS/Lambda --statistic Sum --period 60 --threshold 1 --comparison-operator GreaterThanThreshold --dimensions Name=FunctionName,Value=${env.LAMBDA_FUNCTION_NAME} --evaluation-periods 1 --alarm-actions ${env.SNS_TOPIC_ARN} --region ${env.AWS_REGION}"
             }
         }
     }
