@@ -2,7 +2,7 @@ service: sit-753
 
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
   region: us-east-1
 

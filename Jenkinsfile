@@ -61,7 +61,7 @@ pipeline {
         stage('Integration Tests on Staging') {
             steps {
                 echo "Running integtration tests with Jest..."
-                echo "npm run test"
+                sh "npm run test"
             }
         }
         stage('Deploy to Production') {
